@@ -51,7 +51,12 @@ countPlantes(C) :- setof(X, orbits(X,sun), S), length(S,C).
 countMoons(P,C) :- setof(X, orbits(X,P), S) *-> length(S,C); length([],C).
 
 % all plantes and moons O that are further away from the sun (ae) than P 
-%outer_orbit(P,O) :- ae(P,L), D>L, setof(X, ae(X, D), O). 
+moon_set(P,O) :- setof(Y, (orbits(Y, P), \+ P=sun), O).
+planet_further_away(P,O) :- orbits(P, sun), ae(P, PAE), ae(O,XAE), XAE>PAE.
+outer_orbit(P,L) :- setof([Y,M], (planet_further_away(P,Y), moon_set(Y, M)), H), flatten(H, L).
 
+
+
+	
 
 
